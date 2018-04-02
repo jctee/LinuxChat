@@ -27,6 +27,7 @@ int main (int argc, char **argv)
 {
 	int i, maxi, nready, bytes_to_read, arg;
 	int listen_sd, new_sd, sockfd, port, maxfd, client[FD_SETSIZE];
+	struct in_addr clientName[FD_SETSIZE];
 	unsigned int client_len;
 	struct sockaddr_in server, client_addr;
 	char *bp, buf[BUFLEN];
@@ -90,12 +91,13 @@ int main (int argc, char **argv)
 			if ((new_sd = accept(listen_sd, (struct sockaddr *) &client_addr, &client_len)) == -1)
 			SystemFatal("accept error");
 
-			printf(" Remote Address:  %s\n", inet_ntoa(client_addr.sin_addr));
+			printf("Remote Address:  %s\n", inet_ntoa(client_addr.sin_addr));
 
 			for (i = 0; i < FD_SETSIZE; i++)
 			if (client[i] < 0)
 			{
 				client[i] = new_sd;	// save descriptor
+				clientName[i] = client_addr.sin_addr;
 				break;
 			}
 			if (i == FD_SETSIZE)
@@ -122,7 +124,6 @@ int main (int argc, char **argv)
 
 			if (FD_ISSET(sockfd, &rset))
 			{
-				printf("got something");
 				/*
 				bp = buf;
 				bytes_to_read = BUFLEN;
@@ -133,21 +134,26 @@ int main (int argc, char **argv)
 				}
 				*/
 				memset(buf, '\0', BUFLEN);
-				read(sockfd, buf, 255);
-				printf("writing back %s", buf);
-				write(sockfd, buf, BUFLEN);
+				n = read(sockfd, buf, 255);
+				for (int j = 0; j <= maxi; j++)
+				{
+					if(client[j] != -1)
+					write(client[j], buf, BUFLEN);
+				}
 				// echo to client
 
 				if (n == 0) // connection closed by client
 				{
-					printf(" Remote Address:  %s closed connection\n", inet_ntoa(client_addr.sin_addr));
+					printf("Remote Address:  %s closed connection\n", inet_ntoa(clientName[i]));
 					close(sockfd);
 					FD_CLR(sockfd, &allset);
 					client[i] = -1;
 				}
 
+				/*
 				if (--nready <= 0)
 				break;        // no more readable descriptors
+				*/
 			}
 		}
 	}

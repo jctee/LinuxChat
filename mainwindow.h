@@ -4,7 +4,9 @@
 #include <QMainWindow>
 #include <QtNetwork>
 #include <QInputDialog>
-
+#include <QTime>
+#include <QCloseEvent>
+#include <QMessageBox>
 
 namespace Ui {
 class MainWindow;
@@ -19,6 +21,9 @@ public:
     ~MainWindow();
     void enter();
     void connectToServer();
+    void closeEvent(QCloseEvent* event);
+    void disconnectClient();
+
 
     QTcpSocket* tcpSocket;
     QString ip;

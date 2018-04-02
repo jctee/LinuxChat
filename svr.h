@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <string.h>
 
 #define SERVER_TCP_PORT 7000	// Default port
 #define BUFLEN	255		//Buffer length
