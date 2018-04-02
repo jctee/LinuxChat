@@ -8,6 +8,8 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 
+#include "client.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -19,19 +21,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void enter();
+
     void connectToServer();
     void closeEvent(QCloseEvent* event);
-    void disconnectClient();
 
-
-    QTcpSocket* tcpSocket;
     QString ip;
     int port;
     QString userName;
-
-public slots:
-    void readyRead();
 
 
 private:

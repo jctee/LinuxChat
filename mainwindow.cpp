@@ -7,12 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->actionDisconnect->setEnabled(false);
-    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::enter);
-    connect(ui->actionConnect, &QAction::triggered, this, &MainWindow::connectToServer);
-    connect(ui->actionDisconnect, &QAction::triggered, this, &MainWindow::disconnectClient);
-    //connect(ui->pushButtonConnect, &QPushButton::clicked, this, &MainWindow::disconnectClient);
-
+    connect(ui->pushButtonConnect, &QPushButton::clicked, this, &MainWindow::connectToServer);
 }
 
 MainWindow::~MainWindow()
@@ -20,45 +15,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::disconnectClient()
-{
-    ui->actionDisconnect->setEnabled(false);
-    ui->actionConnect->setEnabled(true);
-
-    tcpSocket->disconnectFromHost();
-}
-
-void MainWindow::enter()
-{
-    //ui->textBrowser->append(ui->textEdit->toPlainText());
-    QString msg = ui->textEdit->toPlainText();
-    if (msg != "")
-    {
-    msg.prepend(userName + ": ");
-    msg.prepend(QTime::currentTime().toString() + "     ");
-    qDebug() << msg;
-    //char test2[255];
-    //memset(test2, '\0', 255);
-    //memcpy(test2, msg.toStdString().c_str() ,msg.size());
-    //qDebug() << test2;
-    qDebug() << tcpSocket->write(msg.toStdString().c_str());
-    tcpSocket->flush();
-    ui->textEdit->setText("");
-    }
-
-}
-
-void MainWindow::readyRead()
-{
-    //qDebug() << tcpSocket->readAll();
-    ui->textBrowser->append(tcpSocket->readAll());
-}
-
 void MainWindow::connectToServer()
 {
-    ui->actionDisconnect->setEnabled(true);
-    ui->actionConnect->setEnabled(false);
-
     bool ok;
     ip = QInputDialog::getText(this, tr("QInputDialog::getText()"), tr("IP Address:"), QLineEdit::Normal, "192.168.0.13", &ok);
     if (ok && !ip.isEmpty())
@@ -80,13 +38,9 @@ void MainWindow::connectToServer()
     {
         //ui->textBrowser->append(userName);
     }
+    Client* c = new Client(this, ip, port, userName);
+    c->show();
 
-    tcpSocket = new QTcpSocket(this);
-    tcpSocket->connectToHost(QHostAddress(ip), port);
-    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    QString hi = userName + " has connected";
-    tcpSocket->write(hi.toStdString().c_str());
-    qDebug() << port;
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
@@ -98,8 +52,6 @@ void MainWindow::closeEvent(QCloseEvent* event)
         if (resBtn != QMessageBox::Yes) {
             event->ignore();
         } else {
-            QString txt = userName + " has disconnected";
-            qDebug() << tcpSocket->write(txt.toStdString().c_str());
             event->accept();
         }
 }
