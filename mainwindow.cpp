@@ -19,39 +19,34 @@ void MainWindow::connectToServer()
 {
     bool ok;
     ip = QInputDialog::getText(this, tr("QInputDialog::getText()"), tr("IP Address:"), QLineEdit::Normal, "192.168.0.13", &ok);
-    if (ok && !ip.isEmpty())
-    {
-        //ui->textBrowser->append(ip);
-    }
 
     bool ok2;
     QString text = QInputDialog::getText(this, tr("QInputDialog::getText()"), tr("Port number:"), QLineEdit::Normal, "9002", &ok2);
     if (ok2 && !text.isEmpty())
     {
         port = text.toInt();
-        //ui->textBrowser->append(port);
     }
 
     bool ok3;
     userName = QInputDialog::getText(this, tr("QInputDialog::getText()"), tr("User name:"), QLineEdit::Normal, QDir::home().dirName(), &ok3);
-    if (ok3 && !userName.isEmpty())
+
+    if(ok && ok2 && ok3)
     {
-        //ui->textBrowser->append(userName);
+        Client* c = new Client(this, ip, port, userName);
+        c->show();
     }
-    Client* c = new Client(this, ip, port, userName);
-    c->show();
 
 }
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    QMessageBox::StandardButton resBtn = QMessageBox::question( this, NULL,
-                                                                    tr("Are you sure?\n"),
-                                                                    QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes,
-                                                                    QMessageBox::Yes);
-        if (resBtn != QMessageBox::Yes) {
+    QMessageBox::StandardButton resBtn = QMessageBox::question( this, NULL, tr("Are you sure?\n"), QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+        if (resBtn != QMessageBox::Yes)
+        {
             event->ignore();
-        } else {
+        }
+        else
+        {
             event->accept();
         }
 }

@@ -36,8 +36,6 @@ public slots:
     void readyRead();
     void enter();
 
-
-
 private:
     Ui::Client *ui;
 };
