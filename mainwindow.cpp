@@ -56,7 +56,6 @@ void MainWindow::connectToServer()
     if(ok && ok2 && ok3)
     {
         Client* c = new Client(this, ip, port, userName);
-        c->show();
     }
 
 }

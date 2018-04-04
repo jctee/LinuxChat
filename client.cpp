@@ -11,10 +11,17 @@ Client::Client(QWidget *parent, QString ip, int port, QString userName) :
 
     tcpSocket = new QTcpSocket(this);
     tcpSocket->connectToHost(QHostAddress(ip), port);
-    QString connectMessage = userName + " has connected";
-    tcpSocket->write(connectMessage.toStdString().c_str());
-
-    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    if(tcpSocket->waitForConnected(1000))
+    {
+        QString connectMessage = userName + " has connected";
+        tcpSocket->write(connectMessage.toStdString().c_str());
+        connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+        this->show();
+    }
+    else
+    {
+        QMessageBox::information(this, NULL, tr("Connection failed\n"));
+    }
     connect(ui->pushButton, &QPushButton::clicked, this, &Client::enter);
     connect(ui->actionDisconnect, &QAction::triggered, this, &Client::disconnectClient);
     connect(ui->actionSaveChat, &QAction::triggered, this, &Client::saveChat);
