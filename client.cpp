@@ -23,6 +23,8 @@ Client::Client(QWidget *parent, QString ip, int port, QString userName) :
 
 void Client::disconnectClient()
 {
+    QString txt = userName + " has disconnected";
+    qDebug() << tcpSocket->write(txt.toStdString().c_str());
     tcpSocket->disconnectFromHost();
     ui->textBrowser->append(userName + " has disconnected");
 }
@@ -63,8 +65,6 @@ void Client::closeEvent(QCloseEvent* event)
     else
     {
         disconnectClient();
-        QString txt = userName + " has disconnected";
-        qDebug() << tcpSocket->write(txt.toStdString().c_str());
         event->accept();
     }
 }
