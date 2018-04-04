@@ -124,15 +124,6 @@ int main (int argc, char **argv)
 
 			if (FD_ISSET(sockfd, &rset))
 			{
-				/*
-				bp = buf;
-				bytes_to_read = BUFLEN;
-				while ((n = read(sockfd, bp, 0)) > 0)
-				{
-					bp += n;
-					bytes_to_read -= n;
-				}
-				*/
 				memset(buf, '\0', BUFLEN);
 				n = read(sockfd, buf, 255);
 				for (int j = 0; j <= maxi; j++)
@@ -149,11 +140,6 @@ int main (int argc, char **argv)
 					FD_CLR(sockfd, &allset);
 					client[i] = -1;
 				}
-
-				/*
-				if (--nready <= 0)
-				break;        // no more readable descriptors
-				*/
 			}
 		}
 	}

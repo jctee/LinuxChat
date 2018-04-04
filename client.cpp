@@ -24,6 +24,7 @@ Client::Client(QWidget *parent, QString ip, int port, QString userName) :
 void Client::disconnectClient()
 {
     tcpSocket->disconnectFromHost();
+    ui->textBrowser->append(userName + " has disconnected");
 }
 
 void Client::saveChat()
