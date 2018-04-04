@@ -24,6 +24,24 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: MainWindow Constructor
+--
+-- DATE: April 4 2018
+--
+-- REVISIONS: None
+--
+-- DESIGNER: John Tee & Li Tong
+--
+-- PROGRAMMER: John Tee
+--
+-- INTERFACE: MainWindow()
+--
+-- RETURNS: N/A
+--
+-- NOTES:
+-- Automatically call this function from main to open the main window into the program.
+----------------------------------------------------------------------------------------------------------------------*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -33,11 +51,49 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButtonConnect, &QPushButton::clicked, this, &MainWindow::connectToServer);
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: MainWindow Destructor
+--
+-- DATE: April 4 2018
+--
+-- REVISIONS: None
+--
+-- DESIGNER: John Tee & Li Tong
+--
+-- PROGRAMMER: John Tee
+--
+-- INTERFACE: ~MainWindow()
+--
+-- RETURNS: N/A
+--
+-- NOTES:
+-- Automatically call this function when MainWindow is destroyed and deletes the ui.
+----------------------------------------------------------------------------------------------------------------------*/
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: connectToServer
+--
+-- DATE: April 4 2018
+--
+-- REVISIONS: None
+--
+-- DESIGNER: John Tee & Li Tong
+--
+-- PROGRAMMER: John Tee
+--
+-- INTERFACE: void connectToServer (void)
+--
+-- RETURNS: void.
+--
+-- NOTES:
+-- Call this function when the user presses "connect". Asks the user for ip address, port number, and username.
+-- if the user presses cancel on any of them, doesn't try to connect at all. If the user presses ok on all of them,
+-- the program instantiates a client that tries to connect to the server.
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::connectToServer()
 {
     bool ok;
@@ -60,6 +116,25 @@ void MainWindow::connectToServer()
 
 }
 
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: closeEvent
+--
+-- DATE: April 4 2018
+--
+-- REVISIONS: None
+--
+-- DESIGNER: John Tee & Li Tong
+--
+-- PROGRAMMER: John Tee
+--
+-- INTERFACE: void closeEvent (QCloseEvent* event)
+--
+-- RETURNS: void.
+--
+-- NOTES:
+-- Call this function when the user presses the X on the top right of a window to try and close the window.
+-- Asks the user for confirmation, pressing Yes closes the window, keeps the window open otherwise.
+----------------------------------------------------------------------------------------------------------------------*/
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     QMessageBox::StandardButton resBtn = QMessageBox::question( this, NULL, tr("Are you sure?\n"), QMessageBox::Cancel | QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
