@@ -56,20 +56,7 @@ void MainWindow::connectToServer()
     if(ok && ok2 && ok3)
     {
         Client* c = new Client(this, ip, port, userName);
-        c->tcpSocket = new QTcpSocket(this);
-        c->tcpSocket->connectToHost(QHostAddress(ip), port);
-        if(c->tcpSocket->waitForConnected(1000))
-        {
-            connect(c->tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
-            QString connectMessage = userName + " has connected";
-            c->tcpSocket->write(connectMessage.toStdString().c_str());
-            c->show();
-        }
-        else
-        {
-            QMessageBox::information( this, NULL, tr("Connection failed\n"));
-            c = NULL;
-        }
+        c->show();
     }
 
 }
