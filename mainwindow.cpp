@@ -1,3 +1,26 @@
+/*------------------------------------------------------------------------------------------------------------------
+-- SOURCE FILE: mainwindow.cpp - An application that is the main menu to allow the user to connect
+--
+-- PROGRAM: inotd
+--
+-- FUNCTIONS:
+-- void connectToServer()
+-- void closeEvent(QCloseEvent* event)
+--
+--
+-- DATE: April 4 2018
+--
+-- REVISIONS: None
+--
+-- DESIGNER: John Tee & Li Tong
+--
+-- PROGRAMMER: John Tee
+--
+-- NOTES:
+-- This program has a button that starts a new connection to a server after providing the ip address,
+-- port number, and a username. After entering all the input, mainwindow instantiates a new client window that
+-- connects to the server corresponding to the entered ip address and port number as the username provided.
+----------------------------------------------------------------------------------------------------------------------*/
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -33,7 +56,20 @@ void MainWindow::connectToServer()
     if(ok && ok2 && ok3)
     {
         Client* c = new Client(this, ip, port, userName);
-        c->show();
+        c->tcpSocket = new QTcpSocket(this);
+        c->tcpSocket->connectToHost(QHostAddress(ip), port);
+        if(c->tcpSocket->waitForConnected(1000))
+        {
+            connect(c->tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+            QString connectMessage = userName + " has connected";
+            c->tcpSocket->write(connectMessage.toStdString().c_str());
+            c->show();
+        }
+        else
+        {
+            QMessageBox::information( this, NULL, tr("Connection failed\n"));
+            c = NULL;
+        }
     }
 
 }

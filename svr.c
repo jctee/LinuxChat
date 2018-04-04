@@ -15,7 +15,7 @@
 --				Modified & redesigned: Aman Abdulla: February 20, 2008
 --        Modified & redesigned: LYT & JCT: March 28, 2018
 --
---	PROGRAMMER:  Li-Yan Tong & John Tee
+--	PROGRAMMER:  Li-Yan Tong
 --
 --	NOTES:
 --	The program will accept TCP connections from multiple client machines.
@@ -146,9 +146,24 @@ int main (int argc, char **argv)
 	return(0);
 }
 
-
-
-// Prints the error stored in errno and aborts the program.
+/*------------------------------------------------------------------------------------------------------------------
+-- FUNCTION: SystemFatal
+--
+-- DATE: March 28 2018
+--
+-- REVISIONS: None
+--
+-- DESIGNER: Aman Abdulla
+--
+-- PROGRAMMER: Aman Abdulla
+--
+-- INTERFACE: void SystemFatal(const char* message)
+--
+-- RETURNS: void.
+--
+-- NOTES:
+-- Call this function to print the error message and gracefully end the program.
+----------------------------------------------------------------------------------------------------------------------*/
 static void SystemFatal(const char* message)
 {
 	perror (message);

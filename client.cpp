@@ -9,12 +9,8 @@ Client::Client(QWidget *parent, QString ip, int port, QString userName) :
     this->userName = userName;
     ui->lineEdit->setMaxLength(255 - 13 - userName.length());
 
-    tcpSocket = new QTcpSocket(this);
-    tcpSocket->connectToHost(QHostAddress(ip), port);
-    QString connectMessage = userName + " has connected";
-    tcpSocket->write(connectMessage.toStdString().c_str());
 
-    connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    //connect(tcpSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
     connect(ui->pushButton, &QPushButton::clicked, this, &Client::enter);
     connect(ui->actionDisconnect, &QAction::triggered, this, &Client::disconnectClient);
     connect(ui->actionSaveChat, &QAction::triggered, this, &Client::saveChat);
